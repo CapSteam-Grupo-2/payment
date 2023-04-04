@@ -1,7 +1,10 @@
 package com.capgeticket.payment.services;
 
-import org.springframework.stereotype.Service;
+import com.capgeticket.payment.models.Payment;
+import com.capgeticket.payment.responses.PaymentResponse;
 
-@Service
-public class PaymentService {
+public interface PaymentService {
+
+	public PaymentResponse pay(Payment payment);
+
 }
