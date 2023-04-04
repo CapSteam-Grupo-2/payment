@@ -9,17 +9,20 @@ import com.capgeticket.payment.responses.PaymentResponse;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
-	
+
 	@Autowired
 	private PayFeingPasarela payFeing;
 
+	/**
+	 * Metodo para enviar pago y recibir una validacion
+	 * 
+	 * @param payment
+	 * @return PaymentResponse
+	 */
 	@Override
 	public PaymentResponse pay(Payment payment) {
-		
-		final PaymentResponse paymentResponse = payFeing.payValidation(payment);
-		return paymentResponse;
+
+		return payFeing.payValidation(payment);
 	}
-	
-	
 
 }
