@@ -22,22 +22,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Object> badRequestExceptionHandler(RuntimeException ex, WebRequest request) throws IOException {
-        CustomError error = new CustomError(String.valueOf(new Date()), ex.hashCode(),
-                ex.toString(), Collections.singletonList(ex.getMessage()));
-        return handleExceptionInternal(ex, error,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
-
-    @ExceptionHandler(InternalServerException.class)
-    public ResponseEntity<Object> internalServerExceptionHandler(RuntimeException ex, WebRequest request) throws IOException {
-        CustomError error = new CustomError(String.valueOf(new Date()), ex.hashCode(),
-                ex.toString(), Collections.singletonList(ex.getMessage()));
-        return handleExceptionInternal(ex, error,
-                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
-    }
-
     @ExceptionHandler(ConstraintViolationException.class)
     public void constraintViolationExceptionHandler(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value());
