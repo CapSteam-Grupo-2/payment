@@ -3,6 +3,7 @@ package com.capgeticket.payment.controllers;
 import com.capgeticket.payment.models.Payment;
 import com.capgeticket.payment.responses.PaymentResponse;
 import com.capgeticket.payment.services.PaymentService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +39,7 @@ public class PaymentController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentResponse.class))}),
             @ApiResponse(responseCode = "500", description = "Servicio inestable", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentResponse.class))})})
+    @CircuitBreaker(name = "paymentCB", fallbackMethod = "fallBackPay")
     @PostMapping("/new")
     public ResponseEntity<PaymentResponse> pay(@RequestBody Payment payment) {
         var result = service.pay(payment);
@@ -47,5 +50,10 @@ public class PaymentController {
             return ResponseEntity.badRequest().body(result);
         }
         return ResponseEntity.internalServerError().body(result);
+    }
+
+    private ResponseEntity<PaymentResponse> fallBackPay(@RequestBody Payment payment, RuntimeException e) {
+        return new ResponseEntity("No se puede realizar un pago actualmente. Intentelo más tarde", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 }
