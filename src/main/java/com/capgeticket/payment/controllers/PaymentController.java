@@ -24,6 +24,11 @@ public class PaymentController {
     @Autowired
     private PaymentService service;
 
+    /**
+     * Realizar un pago con los datos introducidos
+     * @param payment : datos requeridos
+     * @return un responseEntity con el pago realizado o un mensaje de error
+     */
     @Operation(summary = "Realiza un pago", description = "Realiza un pago", tags = {"payment"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pago realizado correctamente", content = {

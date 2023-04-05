@@ -14,9 +14,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     /**
      * Metodo para enviar pago y recibir una validacion
-     *
-     * @param payment
-     * @return PaymentResponse
+     * @param payment : los datos del pago
+     * @return los datos del pago realizado o el mensaje de error
      */
     @Override
     public PaymentResponse pay(Payment payment) {
